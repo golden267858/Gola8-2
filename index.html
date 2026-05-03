@@ -55,14 +55,14 @@
         @keyframes slideDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
-        /* LOGO 区域 - 已放大一倍 */
+        /* LOGO 区域 */
         .logo-container {
             text-align: center;
             margin-top: 15px;
             animation: fadeIn 1s ease-in;
         }
         .main-logo {
-            height: 130px; /* 从 65px 放大到 130px */
+            height: 130px; 
             object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(251, 192, 45, 0.3));
         }
@@ -106,7 +106,7 @@
         .offer-box h1 span { color: var(--gold); font-size: 30px; display: block; text-shadow: 0 0 20px rgba(251, 192, 45, 0.6); margin-top: 5px; font-weight: 900;}
         .subtitle { font-size: 14px; color: #4caf50; font-weight: bold; margin-bottom: 20px; }
         
-        /* 高级感官方合作赞助商区 - 改为 2x2 网格 */
+        /* 官方合作赞助商区 */
         .trust-section {
             width: 100%;
             margin-bottom: 20px;
@@ -128,29 +128,32 @@
             margin: 0 15px;
         }
         
-        /* 这里的 grid 布局实现了两两排列 */
         .trust-icons-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 强制分为两列 */
-            gap: 15px 20px; /* 行间距15px，列间距20px */
-            padding: 0 20px; /* 微调左右内边距 */
-            justify-items: center; /* 图标在各自的格子里居中 */
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px 20px; 
+            padding: 0 20px; 
+            justify-items: center; 
             align-items: center;
         }
         
-        /* 4个合作图标 - 已放大一倍 */
+        /* 游戏及通用图标圆角化 */
         .trust-icons-grid img {
-            height: 64px; /* 从 32px 放大到 64px */
-            max-width: 160px; /* 放宽最大限制，防止大图标被挤压变形 */
+            height: 64px; 
+            max-width: 160px; 
             object-fit: contain;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)) grayscale(10%); /* 调低去色度，更鲜亮 */
+            border-radius: 16px; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)) grayscale(10%); 
             transition: 0.3s;
         }
         .trust-icons-grid img:hover {
             filter: drop-shadow(0 4px 10px rgba(251, 192, 45, 0.3)) grayscale(0%);
         }
 
-        /* 行动按钮区 (并排) */
+        /* KBZ 专属去白边魔法 */
+        .kpay-fix { clip-path: inset(3px round 16px); }
+
+        /* 行动按钮区 */
         .action-area { padding: 0 20px 25px; }
         .btn-group { display: flex; gap: 15px; justify-content: center; }
         .btn { 
@@ -163,7 +166,13 @@
         .btn-tg { background: linear-gradient(135deg, #1c82b6, #24A1DE); }
         .btn-viber { background: linear-gradient(135deg, #5d4ed1, #7360f2); }
         
-        .btn img { width: 40px; height: 40px; margin-bottom: 6px; object-fit: contain; z-index: 2;}
+        /* 基础社交按钮图标尺寸设定为 52px */
+        .btn img { width: 52px; height: 52px; margin-bottom: 6px; object-fit: contain; z-index: 2;}
+        
+        /* 突破素材内部留白的放大魔法 */
+        .tg-fix { transform: scale(1.15); }    /* TG 微放大 15% 填补空白 */
+        .viber-fix { transform: scale(1.25); } /* Viber 放大 25% 填补空白 */
+
         .btn span.main { font-weight: 800; font-size: 15px; z-index: 2; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.3);}
         .btn span.sub { font-size: 11px; opacity: 0.85; margin-top: 3px; z-index: 2;}
         
@@ -211,16 +220,14 @@
             </h1>
             <div class="subtitle">✅ VIP အကောင့် + အမြန်ငွေသွင်း/ငွေထုတ်</div>
             
-            <!-- 高级感：官方合作展示区 (2x2网格) -->
+            <!-- 高级感：官方合作展示区 -->
             <div class="trust-section">
                 <div class="trust-divider">Official Partners</div>
                 <div class="trust-icons-grid">
-                    <!-- 第一排：游戏 -->
                     <img src="club388.webp" alt="Club388">
                     <img src="batman688.webp" alt="Batman688">
-                    <!-- 第二排：支付 -->
-                    <img src="Kpay.webp" alt="KPay" style="border-radius:12px;">
-                    <img src="WavePay.webp" alt="WavePay" style="border-radius:12px;">
+                    <img src="Kpay.webp" alt="KPay" class="kpay-fix">
+                    <img src="WavePay.webp" alt="WavePay">
                 </div>
             </div>
         </div>
@@ -229,12 +236,13 @@
         <div class="action-area">
             <div class="btn-group">
                 <a href="https://6tjzk.bemobtrcks.com/click/1" class="btn btn-tg">
-                    <img src="telegram.webp" alt="Telegram">
+                    <!-- 这里加上了 Telegram 的 tg-fix 魔法 -->
+                    <img src="telegram.webp" alt="Telegram" class="tg-fix">
                     <span class="main">Telegram ဖြင့်<br>ရယူမည်</span>
                     <span class="sub">24/7 Service</span>
                 </a>
                 <a href="https://6tjzk.bemobtrcks.com/click/2" class="btn btn-viber">
-                    <img src="viber.webp" alt="Viber">
+                    <img src="viber.webp" alt="Viber" class="viber-fix">
                     <span class="main">Viber ဖြင့်<br>ရယူမည်</span>
                     <span class="sub">Fast Reply</span>
                 </a>
