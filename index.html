@@ -55,14 +55,14 @@
         @keyframes slideDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
-        /* LOGO 区域 */
+        /* LOGO 区域 - 已放大一倍 */
         .logo-container {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
             animation: fadeIn 1s ease-in;
         }
         .main-logo {
-            height: 65px; 
+            height: 130px; /* 从 65px 放大到 130px */
             object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(251, 192, 45, 0.3));
         }
@@ -71,7 +71,7 @@
         /* 倒计时区域 */
         .timer-container {
             text-align: center;
-            margin: 15px 0 10px;
+            margin: 10px 0;
         }
         .timer-title { color: #aaa; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
         .countdown {
@@ -104,7 +104,7 @@
         }
         .offer-box h1 { font-size: 22px; color: #fff; margin-bottom: 5px; line-height: 1.3; }
         .offer-box h1 span { color: var(--gold); font-size: 30px; display: block; text-shadow: 0 0 20px rgba(251, 192, 45, 0.6); margin-top: 5px; font-weight: 900;}
-        .subtitle { font-size: 14px; color: #4caf50; font-weight: bold; margin-bottom: 25px; }
+        .subtitle { font-size: 14px; color: #4caf50; font-weight: bold; margin-bottom: 20px; }
         
         /* 高级感官方合作赞助商区 - 改为 2x2 网格 */
         .trust-section {
@@ -133,16 +133,17 @@
             display: grid;
             grid-template-columns: 1fr 1fr; /* 强制分为两列 */
             gap: 15px 20px; /* 行间距15px，列间距20px */
-            padding: 0 40px; /* 增加左右内边距，让图标不会太靠边 */
+            padding: 0 20px; /* 微调左右内边距 */
             justify-items: center; /* 图标在各自的格子里居中 */
             align-items: center;
         }
         
+        /* 4个合作图标 - 已放大一倍 */
         .trust-icons-grid img {
-            height: 32px; 
-            max-width: 100px; /* 限制最大宽度，防止某个图标过大 */
+            height: 64px; /* 从 32px 放大到 64px */
+            max-width: 160px; /* 放宽最大限制，防止大图标被挤压变形 */
             object-fit: contain;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)) grayscale(20%);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)) grayscale(10%); /* 调低去色度，更鲜亮 */
             transition: 0.3s;
         }
         .trust-icons-grid img:hover {
@@ -218,8 +219,8 @@
                     <img src="club388.webp" alt="Club388">
                     <img src="batman688.webp" alt="Batman688">
                     <!-- 第二排：支付 -->
-                    <img src="Kpay.webp" alt="KPay" style="border-radius:6px;">
-                    <img src="WavePay.webp" alt="WavePay" style="border-radius:6px;">
+                    <img src="Kpay.webp" alt="KPay" style="border-radius:12px;">
+                    <img src="WavePay.webp" alt="WavePay" style="border-radius:12px;">
                 </div>
             </div>
         </div>
