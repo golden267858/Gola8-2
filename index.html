@@ -26,14 +26,48 @@
             background-image: radial-gradient(circle at center 30%, #1a1a24 0%, #000 70%);
         }
 
-        /* 核心卡片 */
+        /* --- 新增：入口引导图（首屏）样式 --- */
+        #entry-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+        }
+        #entry-screen img {
+            width: 100%;
+            height: 100%;
+            max-width: 420px; /* 与主容器宽度保持一致 */
+            object-fit: cover;
+            /* 给图片加一个轻微的呼吸动画，诱导点击 */
+            animation: pulseBg 2s infinite ease-in-out; 
+        }
+        @keyframes pulseBg {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        /* 核心卡片 (默认隐藏，等点击后显示) */
         .wrapper {
             width: 100%;
             max-width: 420px;
             height: 100vh;
-            display: flex;
+            display: none; /* 初始隐藏 */
             flex-direction: column;
             position: relative;
+            opacity: 0;
+            animation: fadeInPage 0.5s forwards;
+        }
+
+        @keyframes fadeInPage {
+            to { opacity: 1; }
         }
 
         /* 顶部伪装通知栏 */
@@ -47,7 +81,7 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 2px 15px rgba(211, 47, 47, 0.4);
-            animation: slideDown 0.5s ease-out;
+            animation: slideDown 0.6s ease-out 0.2s both; /* 加点延迟让切换更自然 */
             z-index: 10;
         }
         .alert-bar span.icon { font-size: 18px; animation: ring 2s infinite; }
@@ -191,7 +225,13 @@
 </head>
 <body>
 
-    <div class="wrapper">
+    <!-- 第一步：入口引导图区域 -->
+    <div id="entry-screen">
+        <img src="bg.webp" alt="Click to Enter">
+    </div>
+
+    <!-- 第二步：核心详情页区域 -->
+    <div class="wrapper" id="main-content">
         <!-- 顶部通知栏 -->
         <div class="alert-bar">
             <span class="icon">🔔</span>
@@ -255,25 +295,41 @@
     </div>
 
     <script>
-        // 5分钟倒计时脚本
-        let timeInSecs = 4 * 60 + 59;
-        let minElem = document.getElementById('min');
-        let secElem = document.getElementById('sec');
-        
-        let timer = setInterval(function() {
-            timeInSecs--;
-            let m = Math.floor(timeInSecs / 60);
-            let s = timeInSecs % 60;
+        // --- 1. 点击引导图跳转/切换逻辑 ---
+        document.getElementById('entry-screen').addEventListener('click', function() {
+            // 淡出首图
+            this.style.opacity = '0';
+            this.style.visibility = 'hidden';
             
-            minElem.innerText = m < 10 ? '0' + m : m;
-            secElem.innerText = s < 10 ? '0' + s : s;
+            // 延迟一点时间等动画结束后，显示主内容并开启倒计时
+            setTimeout(() => {
+                this.style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+                startTimer(); // 页面展示后再开始倒计时
+            }, 400);
+        });
+
+        // --- 2. 5分钟倒计时逻辑 (封装成函数) ---
+        function startTimer() {
+            let timeInSecs = 4 * 60 + 59;
+            let minElem = document.getElementById('min');
+            let secElem = document.getElementById('sec');
             
-            if(timeInSecs <= 0) {
-                clearInterval(timer);
-                minElem.innerText = "00";
-                secElem.innerText = "00";
-            }
-        }, 1000);
+            let timer = setInterval(function() {
+                timeInSecs--;
+                let m = Math.floor(timeInSecs / 60);
+                let s = timeInSecs % 60;
+                
+                minElem.innerText = m < 10 ? '0' + m : m;
+                secElem.innerText = s < 10 ? '0' + s : s;
+                
+                if(timeInSecs <= 0) {
+                    clearInterval(timer);
+                    minElem.innerText = "00";
+                    secElem.innerText = "00";
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
