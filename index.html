@@ -17,18 +17,18 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* 1. 彻底锁死屏幕，禁止任何滑动 */
+        /* 彻底锁死屏幕，防止机器人和用户滑动查看隐藏内容 */
         body { 
             background-color: #000;
             color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh; 
-            overflow: hidden; /* 强制切断所有滚动条 */
+            overflow: hidden; 
             background-image: radial-gradient(circle at center 30%, #1a1a24 0%, #000 70%);
             display: flex; justify-content: center;
         }
 
-        /* 2. 首屏引导图 */
+        /* 首屏引导图 */
         #entry-screen {
             position: fixed;
             top: 0;
@@ -53,22 +53,20 @@
             50% { transform: scale(1.02); filter: brightness(1.1); }
         }
 
-        /* 3. 核心容器，高度限制在 100% 视口内 */
+        /* 核心容器 */
         .wrapper {
             width: 100%;
             max-width: 420px;
-            height: 100vh; /* 撑满 1 屏幕高度 */
+            height: 100vh;
             display: none; 
             flex-direction: column;
-            justify-content: space-between; /* 弹性分布，把按钮往上挤 */
+            justify-content: space-between;
             position: relative;
             opacity: 0;
             animation: fadeInPage 0.5s forwards;
             padding-bottom: env(safe-area-inset-bottom, 10px); 
         }
         @keyframes fadeInPage { to { opacity: 1; } }
-
-        /* --- 以下全部采用响应式高度 (vh) 和弹性字体 (clamp)，保证短屏幕不被切掉 --- */
 
         /* 顶部通知栏 */
         .alert-bar {
@@ -85,22 +83,11 @@
         @keyframes slideDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
-        /* LOGO 会根据屏幕高度自动缩小 */
-        .logo-container {
-            text-align: center;
-            margin-top: min(2vh, 15px);
-            animation: fadeIn 1s ease-in;
-        }
-        .main-logo {
-            height: min(14vh, 120px); /* 短屏幕自动缩水，腾出空间 */
-            object-fit: contain;
-            filter: drop-shadow(0 0 15px rgba(251, 192, 45, 0.3));
-        }
-        @keyframes fadeIn { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+        .logo-container { text-align: center; margin-top: min(2vh, 15px); }
+        .main-logo { height: min(14vh, 120px); object-fit: contain; }
 
-        /* 倒计时同样弹性 */
         .timer-container { text-align: center; margin: 1vh 0; }
-        .timer-title { color: #aaa; font-size: clamp(10px, 1.5vh, 12px); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5vh; }
+        .timer-title { color: #aaa; font-size: clamp(10px, 1.5vh, 12px); text-transform: uppercase; margin-bottom: 0.5vh; }
         .countdown { display: flex; justify-content: center; gap: 10px; }
         .time-box {
             background: rgba(255,255,255,0.05);
@@ -108,70 +95,55 @@
             border-radius: 8px;
             padding: min(1vh, 8px) 15px;
             font-size: clamp(20px, 3.5vh, 26px);
-            font-weight: 900; color: var(--gold); min-width: 60px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            font-weight: 900; color: var(--gold);
         }
-        .colon { font-size: clamp(20px, 3.5vh, 26px); font-weight: bold; color: var(--gold); align-self: center; animation: blink 1s infinite; }
+        .colon { font-size: 26px; font-weight: bold; color: var(--gold); align-self: center; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 核心文案自适应 */
         .offer-box {
             text-align: center;
             padding: 0 15px;
             flex-grow: 1; display: flex; flex-direction: column; justify-content: center;
         }
-        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); color: #fff; margin-bottom: 0.5vh; line-height: 1.2; }
-        .offer-box h1 span { color: var(--gold); font-size: clamp(22px, 4vh, 30px); display: block; text-shadow: 0 0 15px rgba(251, 192, 45, 0.6); margin-top: 0.5vh; font-weight: 900;}
-        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: max(1vh, 10px); }
+        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); line-height: 1.2; }
+        .offer-box h1 span { color: var(--gold); font-size: clamp(22px, 4vh, 30px); display: block; font-weight: 900; margin-top: 5px; }
+        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: 1vh; }
         
-        /* 赞助商图片缩小，防止占用过多高度 */
-        .trust-section { width: 100%; margin-bottom: max(1vh, 10px); }
-        .trust-divider {
-            display: flex; align-items: center; text-align: center; color: #666; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1vh;
-        }
+        .trust-section { width: 100%; margin-bottom: 1vh; }
+        .trust-divider { display: flex; align-items: center; color: #666; font-size: 10px; text-transform: uppercase; margin-bottom: 1vh; }
         .trust-divider::before, .trust-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1); margin: 0 10px; }
-        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 20px; justify-items: center; align-items: center; }
-        .trust-icons-grid img {
-            height: min(6vh, 50px); /* 重点限制图片最大高度 */
-            max-width: 140px; object-fit: contain; border-radius: 12px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)) grayscale(10%); transition: 0.3s;
-        }
-        .trust-icons-grid img:hover { filter: drop-shadow(0 4px 10px rgba(251, 192, 45, 0.3)) grayscale(0%); }
-        .kpay-fix { clip-path: inset(3px round 12px); }
+        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 20px; }
+        .trust-icons-grid img { height: min(6vh, 50px); width: 100%; object-fit: contain; }
 
-        /* 行动按钮区弹性上提 */
-        .action-area { padding: 0 20px 1vh; }
-        .btn-group { display: none; /* 初始状态设为隐藏，等待 JS 唤醒 */ gap: 15px; justify-content: center; }
+        /* 关键：初始隐藏按钮组 */
+        .btn-group { display: none; gap: 15px; justify-content: center; }
+        
         .btn { 
             flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
             text-decoration: none; padding: min(1.5vh, 12px) 5px; border-radius: 14px; 
-            color: white; transition: 0.2s; position: relative; overflow: hidden;
+            color: white; position: relative; overflow: hidden;
             border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
         .btn-tg { background: linear-gradient(135deg, #1c82b6, #24A1DE); }
         .btn-viber { background: linear-gradient(135deg, #5d4ed1, #7360f2); }
+        .btn img { width: min(6vh, 40px); height: min(6vh, 40px); margin-bottom: 4px; }
+        .btn span.main { font-weight: 800; font-size: clamp(13px, 2vh, 15px); }
+        .btn span.sub { font-size: 10px; opacity: 0.8; }
         
-        .btn img { width: min(7vh, 48px); height: min(7vh, 48px); margin-bottom: 4px; object-fit: contain; z-index: 2;}
-        .tg-fix { transform: scale(1.15); }
-        .viber-fix { transform: scale(1.25); }
-
-        .btn span.main { font-weight: 800; font-size: clamp(13px, 2vh, 15px); z-index: 2; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.3);}
-        .btn span.sub { font-size: 10px; opacity: 0.85; margin-top: 2px; z-index: 2;}
-        
-        /* 扫光 */
+        /* 扫光效果 */
         .btn::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); animation: shine 3s infinite; z-index: 1;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); animation: shine 3s infinite;
         }
         @keyframes shine { 0% { left: -100%; } 20%, 100% { left: 200%; } }
-        .btn:active { transform: scale(0.96); }
 
-        .footer { text-align: center; font-size: 10px; color: #555; padding-bottom: max(1.5vh, 10px); }
+        .footer { text-align: center; font-size: 10px; color: #555; padding-bottom: 1.5vh; }
 
     </style>
 </head>
 <body>
 
-    <!-- 🤖 机器人陷阱 (Honeypot)：真实人类看不见也点不到。只要有点击记录，100%是高级爬虫，直接拉黑ZoneID！ -->
+    <!-- 🤖 机器人陷阱 (Honeypot)：真实人类点不到，只要BeMob里有/click/3记录，该ZoneID必是机器人 -->
     <a href="https://6tjzk.bemobtrcks.com/click/3" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; width: 1px; height: 1px; z-index: -1;">Claim Bonus</a>
 
     <!-- 引导层 -->
@@ -179,7 +151,7 @@
         <img src="bg.webp" alt="Click to Enter">
     </div>
 
-    <!-- 落地页 -->
+    <!-- 落地页主内容 -->
     <div class="wrapper" id="main-content">
         <div>
             <div class="alert-bar">
@@ -212,54 +184,56 @@
                 <div class="trust-icons-grid">
                     <img src="club388.webp" alt="Club388">
                     <img src="batman688.webp" alt="Batman688">
-                    <img src="Kpay.webp" alt="KPay" class="kpay-fix">
+                    <img src="Kpay.webp" alt="KPay">
                     <img src="WavePay.webp" alt="WavePay">
                 </div>
             </div>
         </div>
 
         <div>
-            <div class="action-area">
-                <!-- 这里的 btn-group 在 CSS 里已被默认隐藏，等待 JS 唤醒 -->
+            <div class="action-area" style="min-height: 80px;"> <!-- 预留高度防止抖动 -->
                 <div class="btn-group" id="btn-group">
                     <a href="https://6tjzk.bemobtrcks.com/click/1" class="btn btn-tg">
-                        <img src="telegram.webp" alt="Telegram" class="tg-fix">
+                        <img src="telegram.webp" alt="Telegram">
                         <span class="main">Telegram ဖြင့်<br>ရယူမည်</span>
                         <span class="sub">24/7 Service</span>
                     </a>
                     <a href="https://6tjzk.bemobtrcks.com/click/2" class="btn btn-viber">
-                        <img src="viber.webp" alt="Viber" class="viber-fix">
+                        <img src="viber.webp" alt="Viber">
                         <span class="main">Viber ဖြင့်<br>ရယူမည်</span>
                         <span class="sub">Fast Reply</span>
                     </a>
                 </div>
             </div>
-
             <div class="footer">
                 Official Agent for Myanmar • 100% Secure & Trusted
             </div>
         </div>
     </div>
 
-    <!-- 倒计时与跳转脚本 -->
     <script>
-        // ⏳ 延迟加载按钮防机器策略
-        // 页面刚加载 1 秒后才将按钮显示出来。很多低级爬虫停留不到 0.1 秒，根本找不到链接。
-        setTimeout(function() {
-            document.getElementById('btn-group').style.display = 'flex';
-        }, 1000);
-
+        // 核心交互逻辑
         document.getElementById('entry-screen').addEventListener('click', function() {
+            // 隐藏引导图
             this.style.opacity = '0';
             this.style.visibility = 'hidden';
             
             setTimeout(() => {
                 this.style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
+                // 显示主内容
+                const mainContent = document.getElementById('main-content');
+                mainContent.style.display = 'flex';
+                
+                // 🛡️ 核心防刷：主页面显示后，再等整整 1 秒才弹出按钮
+                setTimeout(function() {
+                    document.getElementById('btn-group').style.display = 'flex';
+                }, 1000);
+
                 startTimer(); 
             }, 400); 
         });
 
+        // 倒计时函数
         function startTimer() {
             let timeInSecs = 4 * 60 + 59;
             let minElem = document.getElementById('min');
