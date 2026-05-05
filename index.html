@@ -140,7 +140,7 @@
 
         /* 行动按钮区弹性上提 */
         .action-area { padding: 0 20px 1vh; }
-        .btn-group { display: flex; gap: 15px; justify-content: center; }
+        .btn-group { display: none; /* 初始状态设为隐藏，等待 JS 唤醒 */ gap: 15px; justify-content: center; }
         .btn { 
             flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
             text-decoration: none; padding: min(1.5vh, 12px) 5px; border-radius: 14px; 
@@ -170,6 +170,9 @@
     </style>
 </head>
 <body>
+
+    <!-- 🤖 机器人陷阱 (Honeypot)：真实人类看不见也点不到。只要有点击记录，100%是高级爬虫，直接拉黑ZoneID！ -->
+    <a href="https://6tjzk.bemobtrcks.com/click/3" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; width: 1px; height: 1px; z-index: -1;">Claim Bonus</a>
 
     <!-- 引导层 -->
     <div id="entry-screen">
@@ -217,7 +220,8 @@
 
         <div>
             <div class="action-area">
-                <div class="btn-group">
+                <!-- 这里的 btn-group 在 CSS 里已被默认隐藏，等待 JS 唤醒 -->
+                <div class="btn-group" id="btn-group">
                     <a href="https://6tjzk.bemobtrcks.com/click/1" class="btn btn-tg">
                         <img src="telegram.webp" alt="Telegram" class="tg-fix">
                         <span class="main">Telegram ဖြင့်<br>ရယူမည်</span>
@@ -239,6 +243,12 @@
 
     <!-- 倒计时与跳转脚本 -->
     <script>
+        // ⏳ 延迟加载按钮防机器策略
+        // 页面刚加载 1 秒后才将按钮显示出来。很多低级爬虫停留不到 0.1 秒，根本找不到链接。
+        setTimeout(function() {
+            document.getElementById('btn-group').style.display = 'flex';
+        }, 1000);
+
         document.getElementById('entry-screen').addEventListener('click', function() {
             this.style.opacity = '0';
             this.style.visibility = 'hidden';
