@@ -23,11 +23,15 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh; 
             overflow: hidden; 
+            /* 默认黑底渐变，图片没加载出来时先显示这个 */
             background-image: radial-gradient(circle at center 30%, #1a1a24 0%, #000 70%);
+            background-size: cover;
+            background-position: center;
             display: flex; justify-content: center;
+            transition: background 0.8s ease-in; /* 图片出现时的平滑过渡 */
         }
 
-        /* 核心容器 - 直接显示 */
+        /* 核心容器 - 依然是秒开 */
         .wrapper {
             width: 100%;
             max-width: 420px;
@@ -37,6 +41,8 @@
             justify-content: space-between;
             position: relative;
             padding-bottom: env(safe-area-inset-bottom, 10px); 
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.4); /* 给文字背后加一层半透明，防止图片太花看不清字 */
         }
 
         .alert-bar {
@@ -52,14 +58,14 @@
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
         .logo-container { text-align: center; margin-top: min(2vh, 15px); }
-        .main-logo { height: min(14vh, 120px); object-fit: contain; }
+        .main-logo { height: min(12vh, 100px); object-fit: contain; }
 
         .timer-container { text-align: center; margin: 1vh 0; }
-        .timer-title { color: #aaa; font-size: clamp(10px, 1.5vh, 12px); text-transform: uppercase; margin-bottom: 0.5vh; }
+        .timer-title { color: #eee; font-size: clamp(10px, 1.5vh, 12px); text-shadow: 1px 1px 2px #000; margin-bottom: 0.5vh; }
         .countdown { display: flex; justify-content: center; gap: 10px; }
         .time-box {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(251, 192, 45, 0.3);
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--gold);
             border-radius: 8px;
             padding: min(1vh, 8px) 15px;
             font-size: clamp(20px, 3.5vh, 26px);
@@ -73,17 +79,17 @@
             padding: 0 15px;
             flex-grow: 1; display: flex; flex-direction: column; justify-content: center;
         }
-        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); line-height: 1.2; }
+        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); line-height: 1.2; text-shadow: 2px 2px 4px #000; }
         .offer-box h1 span { color: var(--gold); font-size: clamp(22px, 4vh, 30px); display: block; font-weight: 900; margin-top: 5px; }
-        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: 1vh; }
+        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: 1vh; text-shadow: 1px 1px 2px #000; }
         
-        .trust-section { width: 100%; margin-bottom: 1vh; }
-        .trust-divider { display: flex; align-items: center; color: #666; font-size: 10px; text-transform: uppercase; margin-bottom: 1vh; }
-        .trust-divider::before, .trust-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1); margin: 0 10px; }
-        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 20px; }
-        .trust-icons-grid img { height: min(6vh, 50px); width: 100%; object-fit: contain; }
+        .trust-section { width: 100%; margin-bottom: 1vh; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 10px;}
+        .trust-divider { display: flex; align-items: center; color: #ccc; font-size: 10px; text-transform: uppercase; margin-bottom: 1vh; }
+        .trust-divider::before, .trust-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.3); margin: 0 10px; }
+        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 10px; }
+        .trust-icons-grid img { height: min(5vh, 40px); width: 100%; object-fit: contain; }
 
-        /* 关键：初始隐藏按钮组，防止秒点机器人 */
+        /* 初始隐藏按钮组 */
         .btn-group { visibility: hidden; display: flex; gap: 15px; justify-content: center; }
         
         .btn { 
@@ -104,7 +110,7 @@
         }
         @keyframes shine { 0% { left: -100%; } 20%, 100% { left: 200%; } }
 
-        .footer { text-align: center; font-size: 10px; color: #555; padding-bottom: 1.5vh; }
+        .footer { text-align: center; font-size: 10px; color: #ccc; padding-bottom: 1.5vh; text-shadow: 1px 1px 2px #000; }
 
     </style>
 </head>
@@ -173,11 +179,21 @@
     </div>
 
     <script>
-        // 页面加载后立即启动逻辑
+        // 1. 异步加载背景图逻辑
+        function preloadBackground() {
+            var bgImg = new Image();
+            bgImg.src = "bg.webp"; // 指向你的大图
+            bgImg.onload = function() {
+                // 当图片下载完后，再把它设置为 body 背景
+                document.body.style.backgroundImage = "url('bg.webp')";
+            };
+        }
+
         window.onload = function() {
+            preloadBackground(); // 开始偷偷下载背景图
             startTimer(); 
             
-            // 🛡️ 极速加载策略：按钮仅延迟 1 秒出现，确保真实用户看得到，机器人抓不到
+            // 🛡️ 按钮延迟出现，防止机器人
             setTimeout(function() {
                 document.getElementById('btn-group').style.visibility = 'visible';
             }, 1000);
@@ -187,7 +203,6 @@
             let timeInSecs = 4 * 60 + 59;
             let minElem = document.getElementById('min');
             let secElem = document.getElementById('sec');
-            
             let timer = setInterval(function() {
                 timeInSecs--;
                 let m = Math.floor(timeInSecs / 60);
