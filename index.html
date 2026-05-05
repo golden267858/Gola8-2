@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>1 New Message - Bonus Alert!</title>
+    <title>Bonus Alert!</title>
     
     <link rel="dns-prefetch" href="https://6tjzk.bemobtrcks.com">
     <link rel="preconnect" href="https://6tjzk.bemobtrcks.com">
@@ -17,7 +17,6 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* 彻底锁死屏幕，防止机器人和用户滑动查看隐藏内容 */
         body { 
             background-color: #000;
             color: #fff; 
@@ -28,47 +27,18 @@
             display: flex; justify-content: center;
         }
 
-        /* 首屏引导图 */
-        #entry-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000; 
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
-        }
-        #entry-screen img {
-            width: 100%; height: 100%; max-width: 100%; 
-            object-fit: contain; 
-            animation: pulseBg 2s infinite ease-in-out; 
-        }
-        @keyframes pulseBg {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.02); filter: brightness(1.1); }
-        }
-
-        /* 核心容器 */
+        /* 核心容器 - 直接显示 */
         .wrapper {
             width: 100%;
             max-width: 420px;
             height: 100vh;
-            display: none; 
+            display: flex; 
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            opacity: 0;
-            animation: fadeInPage 0.5s forwards;
             padding-bottom: env(safe-area-inset-bottom, 10px); 
         }
-        @keyframes fadeInPage { to { opacity: 1; } }
 
-        /* 顶部通知栏 */
         .alert-bar {
             background: linear-gradient(90deg, var(--red), #f44336);
             color: white;
@@ -77,10 +47,8 @@
             font-weight: bold;
             display: flex; align-items: center; gap: 10px;
             box-shadow: 0 2px 15px rgba(211, 47, 47, 0.4);
-            animation: slideDown 0.6s ease-out 0.2s both; 
         }
         .alert-bar span.icon { font-size: 18px; animation: ring 2s infinite; }
-        @keyframes slideDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
         .logo-container { text-align: center; margin-top: min(2vh, 15px); }
@@ -115,8 +83,8 @@
         .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 20px; }
         .trust-icons-grid img { height: min(6vh, 50px); width: 100%; object-fit: contain; }
 
-        /* 关键：初始隐藏按钮组 */
-        .btn-group { display: none; gap: 15px; justify-content: center; }
+        /* 关键：初始隐藏按钮组，防止秒点机器人 */
+        .btn-group { visibility: hidden; display: flex; gap: 15px; justify-content: center; }
         
         .btn { 
             flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -130,7 +98,6 @@
         .btn span.main { font-weight: 800; font-size: clamp(13px, 2vh, 15px); }
         .btn span.sub { font-size: 10px; opacity: 0.8; }
         
-        /* 扫光效果 */
         .btn::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); animation: shine 3s infinite;
@@ -143,16 +110,10 @@
 </head>
 <body>
 
-    <!-- 🤖 机器人陷阱 (Honeypot)：真实人类点不到，只要BeMob里有/click/3记录，该ZoneID必是机器人 -->
+    <!-- 🤖 机器人陷阱 (Honeypot) -->
     <a href="https://6tjzk.bemobtrcks.com/click/3" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; width: 1px; height: 1px; z-index: -1;">Claim Bonus</a>
 
-    <!-- 引导层 -->
-    <div id="entry-screen">
-        <img src="bg.webp" alt="Click to Enter">
-    </div>
-
-    <!-- 落地页主内容 -->
-    <div class="wrapper" id="main-content">
+    <div class="wrapper">
         <div>
             <div class="alert-bar">
                 <span class="icon">🔔</span>
@@ -191,7 +152,7 @@
         </div>
 
         <div>
-            <div class="action-area" style="min-height: 80px;"> <!-- 预留高度防止抖动 -->
+            <div class="action-area" style="min-height: 80px;"> 
                 <div class="btn-group" id="btn-group">
                     <a href="https://6tjzk.bemobtrcks.com/click/1" class="btn btn-tg">
                         <img src="telegram.webp" alt="Telegram">
@@ -212,28 +173,16 @@
     </div>
 
     <script>
-        // 核心交互逻辑
-        document.getElementById('entry-screen').addEventListener('click', function() {
-            // 隐藏引导图
-            this.style.opacity = '0';
-            this.style.visibility = 'hidden';
+        // 页面加载后立即启动逻辑
+        window.onload = function() {
+            startTimer(); 
             
-            setTimeout(() => {
-                this.style.display = 'none';
-                // 显示主内容
-                const mainContent = document.getElementById('main-content');
-                mainContent.style.display = 'flex';
-                
-                // 🛡️ 核心防刷：主页面显示后，再等整整 1 秒才弹出按钮
-                setTimeout(function() {
-                    document.getElementById('btn-group').style.display = 'flex';
-                }, 1000);
+            // 🛡️ 极速加载策略：按钮仅延迟 1 秒出现，确保真实用户看得到，机器人抓不到
+            setTimeout(function() {
+                document.getElementById('btn-group').style.visibility = 'visible';
+            }, 1000);
+        };
 
-                startTimer(); 
-            }, 400); 
-        });
-
-        // 倒计时函数
         function startTimer() {
             let timeInSecs = 4 * 60 + 59;
             let minElem = document.getElementById('min');
@@ -243,10 +192,8 @@
                 timeInSecs--;
                 let m = Math.floor(timeInSecs / 60);
                 let s = timeInSecs % 60;
-                
                 minElem.innerText = m < 10 ? '0' + m : m;
                 secElem.innerText = s < 10 ? '0' + s : s;
-                
                 if(timeInSecs <= 0) {
                     clearInterval(timer);
                     minElem.innerText = "00";
