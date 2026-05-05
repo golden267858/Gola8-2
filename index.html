@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bonus Alert!</title>
+    <title>1 New Message - Bonus Alert!</title>
     
     <link rel="dns-prefetch" href="https://6tjzk.bemobtrcks.com">
     <link rel="preconnect" href="https://6tjzk.bemobtrcks.com">
@@ -17,34 +17,58 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        /* 彻底锁死屏幕，防止机器人和用户滑动查看隐藏内容 */
         body { 
             background-color: #000;
             color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh; 
             overflow: hidden; 
-            /* 默认黑底渐变，图片没加载出来时先显示这个 */
             background-image: radial-gradient(circle at center 30%, #1a1a24 0%, #000 70%);
-            background-size: cover;
-            background-position: center;
             display: flex; justify-content: center;
-            transition: background 0.8s ease-in; /* 图片出现时的平滑过渡 */
         }
 
-        /* 核心容器 - 依然是秒开 */
+        /* 首屏引导图 */
+        #entry-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000; 
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+        }
+        #entry-screen img {
+            width: 100%; height: 100%; max-width: 100%; 
+            object-fit: contain; 
+            animation: pulseBg 2s infinite ease-in-out; 
+        }
+        @keyframes pulseBg {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        /* 核心容器 */
         .wrapper {
             width: 100%;
             max-width: 420px;
             height: 100vh;
-            display: flex; 
+            display: none; 
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            opacity: 0;
+            animation: fadeInPage 0.5s forwards;
             padding-bottom: env(safe-area-inset-bottom, 10px); 
-            z-index: 5;
-            background: rgba(0, 0, 0, 0.4); /* 给文字背后加一层半透明，防止图片太花看不清字 */
         }
+        @keyframes fadeInPage { to { opacity: 1; } }
 
+        /* 顶部通知栏 */
         .alert-bar {
             background: linear-gradient(90deg, var(--red), #f44336);
             color: white;
@@ -53,19 +77,21 @@
             font-weight: bold;
             display: flex; align-items: center; gap: 10px;
             box-shadow: 0 2px 15px rgba(211, 47, 47, 0.4);
+            animation: slideDown 0.6s ease-out 0.2s both; 
         }
         .alert-bar span.icon { font-size: 18px; animation: ring 2s infinite; }
+        @keyframes slideDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
         @keyframes ring { 0%, 100% { transform: rotate(0); } 10%, 30%, 50% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } }
 
         .logo-container { text-align: center; margin-top: min(2vh, 15px); }
-        .main-logo { height: min(12vh, 100px); object-fit: contain; }
+        .main-logo { height: min(14vh, 120px); object-fit: contain; }
 
         .timer-container { text-align: center; margin: 1vh 0; }
-        .timer-title { color: #eee; font-size: clamp(10px, 1.5vh, 12px); text-shadow: 1px 1px 2px #000; margin-bottom: 0.5vh; }
+        .timer-title { color: #aaa; font-size: clamp(10px, 1.5vh, 12px); text-transform: uppercase; margin-bottom: 0.5vh; }
         .countdown { display: flex; justify-content: center; gap: 10px; }
         .time-box {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid var(--gold);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(251, 192, 45, 0.3);
             border-radius: 8px;
             padding: min(1vh, 8px) 15px;
             font-size: clamp(20px, 3.5vh, 26px);
@@ -79,18 +105,18 @@
             padding: 0 15px;
             flex-grow: 1; display: flex; flex-direction: column; justify-content: center;
         }
-        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); line-height: 1.2; text-shadow: 2px 2px 4px #000; }
+        .offer-box h1 { font-size: clamp(16px, 2.5vh, 22px); line-height: 1.2; }
         .offer-box h1 span { color: var(--gold); font-size: clamp(22px, 4vh, 30px); display: block; font-weight: 900; margin-top: 5px; }
-        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: 1vh; text-shadow: 1px 1px 2px #000; }
+        .subtitle { font-size: clamp(12px, 2vh, 14px); color: #4caf50; font-weight: bold; margin-bottom: 1vh; }
         
-        .trust-section { width: 100%; margin-bottom: 1vh; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 10px;}
-        .trust-divider { display: flex; align-items: center; color: #ccc; font-size: 10px; text-transform: uppercase; margin-bottom: 1vh; }
-        .trust-divider::before, .trust-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.3); margin: 0 10px; }
-        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 10px; }
-        .trust-icons-grid img { height: min(5vh, 40px); width: 100%; object-fit: contain; }
+        .trust-section { width: 100%; margin-bottom: 1vh; }
+        .trust-divider { display: flex; align-items: center; color: #666; font-size: 10px; text-transform: uppercase; margin-bottom: 1vh; }
+        .trust-divider::before, .trust-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1); margin: 0 10px; }
+        .trust-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; padding: 0 20px; }
+        .trust-icons-grid img { height: min(6vh, 50px); width: 100%; object-fit: contain; }
 
-        /* 初始隐藏按钮组 */
-        .btn-group { visibility: hidden; display: flex; gap: 15px; justify-content: center; }
+        /* 关键：初始隐藏按钮组 */
+        .btn-group { display: none; gap: 15px; justify-content: center; }
         
         .btn { 
             flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -104,22 +130,29 @@
         .btn span.main { font-weight: 800; font-size: clamp(13px, 2vh, 15px); }
         .btn span.sub { font-size: 10px; opacity: 0.8; }
         
+        /* 扫光效果 */
         .btn::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); animation: shine 3s infinite;
         }
         @keyframes shine { 0% { left: -100%; } 20%, 100% { left: 200%; } }
 
-        .footer { text-align: center; font-size: 10px; color: #ccc; padding-bottom: 1.5vh; text-shadow: 1px 1px 2px #000; }
+        .footer { text-align: center; font-size: 10px; color: #555; padding-bottom: 1.5vh; }
 
     </style>
 </head>
 <body>
 
-    <!-- 🤖 机器人陷阱 (Honeypot) -->
+    <!-- 🤖 机器人陷阱 (Honeypot)：真实人类点不到，只要BeMob里有/click/3记录，该ZoneID必是机器人 -->
     <a href="https://6tjzk.bemobtrcks.com/click/3" style="position: absolute; left: -9999px; top: -9999px; opacity: 0; width: 1px; height: 1px; z-index: -1;">Claim Bonus</a>
 
-    <div class="wrapper">
+    <!-- 引导层 -->
+    <div id="entry-screen">
+        <img src="bg.webp" alt="Click to Enter">
+    </div>
+
+    <!-- 落地页主内容 -->
+    <div class="wrapper" id="main-content">
         <div>
             <div class="alert-bar">
                 <span class="icon">🔔</span>
@@ -158,7 +191,7 @@
         </div>
 
         <div>
-            <div class="action-area" style="min-height: 80px;"> 
+            <div class="action-area" style="min-height: 80px;"> <!-- 预留高度防止抖动 -->
                 <div class="btn-group" id="btn-group">
                     <a href="https://6tjzk.bemobtrcks.com/click/1" class="btn btn-tg">
                         <img src="telegram.webp" alt="Telegram">
@@ -179,36 +212,41 @@
     </div>
 
     <script>
-        // 1. 异步加载背景图逻辑
-        function preloadBackground() {
-            var bgImg = new Image();
-            bgImg.src = "bg.webp"; // 指向你的大图
-            bgImg.onload = function() {
-                // 当图片下载完后，再把它设置为 body 背景
-                document.body.style.backgroundImage = "url('bg.webp')";
-            };
-        }
-
-        window.onload = function() {
-            preloadBackground(); // 开始偷偷下载背景图
-            startTimer(); 
+        // 核心交互逻辑
+        document.getElementById('entry-screen').addEventListener('click', function() {
+            // 隐藏引导图
+            this.style.opacity = '0';
+            this.style.visibility = 'hidden';
             
-            // 🛡️ 按钮延迟出现，防止机器人
-            setTimeout(function() {
-                document.getElementById('btn-group').style.visibility = 'visible';
-            }, 1000);
-        };
+            setTimeout(() => {
+                this.style.display = 'none';
+                // 显示主内容
+                const mainContent = document.getElementById('main-content');
+                mainContent.style.display = 'flex';
+                
+                // 🛡️ 核心防刷：主页面显示后，再等整整 1 秒才弹出按钮
+                setTimeout(function() {
+                    document.getElementById('btn-group').style.display = 'flex';
+                }, 1000);
 
+                startTimer(); 
+            }, 400); 
+        });
+
+        // 倒计时函数
         function startTimer() {
             let timeInSecs = 4 * 60 + 59;
             let minElem = document.getElementById('min');
             let secElem = document.getElementById('sec');
+            
             let timer = setInterval(function() {
                 timeInSecs--;
                 let m = Math.floor(timeInSecs / 60);
                 let s = timeInSecs % 60;
+                
                 minElem.innerText = m < 10 ? '0' + m : m;
                 secElem.innerText = s < 10 ? '0' + s : s;
+                
                 if(timeInSecs <= 0) {
                     clearInterval(timer);
                     minElem.innerText = "00";
